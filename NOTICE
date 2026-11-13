@@ -16,10 +16,13 @@ Architecture and product idea credited to:
 What was not copied: packages/core, default-templates, UI, storage,
 history, or any other file from that repository.
 
-What this program implements on its own: mode routing (system, user,
-image), fenced interpolation, iterate-by-pipe, a draft → critique →
-revise loop, and a Magpie OpenAI-compatible client defaulting to
-grok/grok-4.7. The loop matches the upstream product sequence
+What this program implements on its own: an intake analyst that writes
+a JSON brief (mode, strategy, assumptions, expert practices,
+placeholders, questions), automatic mode routing (system, user, image),
+up-front interactive questions, domain craft references, fenced
+interpolation, iterate-by-pipe, a scored draft → critique → revise loop
+with best-of selection, and a Magpie OpenAI-compatible client
+defaulting to grok/grok-4.7. The loop matches the upstream product sequence
 (optimize, then an evaluation, then iterate with that evaluation as
 the change request). The prompt text is not theirs.
 

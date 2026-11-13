@@ -72,6 +72,7 @@ test("complete posts chat completions and returns content", async () => {
   assert.equal(seen.url, "http://127.0.0.1:3425/v1/chat/completions");
   assert.equal(seen.init.headers.Authorization, "Bearer secret-key");
   assert.equal(JSON.parse(seen.init.body).model, "grok/grok-4.7");
+  assert.equal(JSON.parse(seen.init.body).max_tokens, 32768);
 });
 
 test("complete redacts the key from an error body", async () => {

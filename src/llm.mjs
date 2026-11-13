@@ -54,7 +54,7 @@ export async function complete(opts) {
     model: opts.model,
     messages: opts.messages,
     temperature: opts.temperature ?? 0.2,
-    max_tokens: opts.maxTokens ?? 8192,
+    max_tokens: opts.maxTokens ?? 32768,
     stream: Boolean(opts.stream),
   };
   if (opts.effort) body.reasoning_effort = opts.effort;

@@ -11,6 +11,7 @@ export const BLOCKING = new Set([
   "dropped_constraint",
   "contradiction",
   "fabricated_fact",
+  "invites_fabrication",
   "wrong_strategy",
   "answered_task",
   "wrong_language",
@@ -18,12 +19,14 @@ export const BLOCKING = new Set([
 ]);
 export const WEIGHT = { intent: 3, fidelity: 3, craft: 2, specificity: 2, executability: 1, format: 1 };
 export const MAX_TOTAL = 60;
+/** Lowest score that still passes. Executability is 4 because the reviewer caps it at 3 for any internal conflict. */
+export const MIN_SCORE = { intent: 4, fidelity: 4, craft: 4, specificity: 4, executability: 4, format: 3 };
 const HINT = {
   intent: "Serve the purpose behind the request and the downstream use, not only its literal words.",
-  fidelity: "Restore every stated fact at full strength and replace invented client facts with placeholders.",
+  fidelity: "Restore every stated fact at full strength, turn guesses about the client into slots with defaults, and replace invented client content with placeholders.",
   craft: "Turn the field's expert method into specific instructions for this request.",
   specificity: "Decide what is still left open or offered as a menu, or, for reusable prompts, replace the one invented scenario with rules.",
-  executability: "Remove conflicts and padding so every sentence is actionable.",
+  executability: "Remove conflicts with the client's limits and between instructions, give a fallback for abilities the model may lack, and cut padding.",
   format: "Make it paste-ready in the right shape for its kind.",
 };
 
@@ -65,9 +68,7 @@ export function parseCritique(text) {
   for (const key of Object.keys(WEIGHT)) scores[key] = score(data.scores?.[key]);
   const blocked = violations.some((v) => BLOCKING.has(v.type));
   const total = Object.entries(WEIGHT).reduce((sum, [key, w]) => sum + w * scores[key], 0) - (blocked ? 15 : 0);
-  const pass = !blocked
-    && scores.intent >= 4 && scores.fidelity >= 4 && scores.craft >= 4 && scores.specificity >= 4
-    && scores.executability >= 3 && scores.format >= 3;
+  const pass = !blocked && Object.entries(MIN_SCORE).every(([key, min]) => scores[key] >= min);
   const weakest = list(data.weakest);
   const keep = list(data.keep);
   let instruction = typeof data.instruction === "string" ? data.instruction.trim() : "";
@@ -75,7 +76,7 @@ export function parseCritique(text) {
     instruction = [...violations.map((v) => `${v.type}: ${v.detail}`), ...weakest.map((w) => `Improve: ${w}`)].join("\n");
   }
   if (!pass && !instruction) {
-    const low = Object.entries(scores).filter(([k, v]) => v < (k === "executability" || k === "format" ? 3 : 4));
+    const low = Object.entries(scores).filter(([k, v]) => v < MIN_SCORE[k]);
     instruction = `Raise ${low.map(([k, v]) => `${k} (now ${v}/5)`).join(", ")}: ${low.map(([k]) => HINT[k]).join(" ")}`;
   }
   if (pass) instruction = "";

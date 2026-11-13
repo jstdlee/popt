@@ -1,0 +1,17 @@
+[
+  { "id": "01-cat", "mode": "image", "input": "窗台上的猫", "probe": "generic subject; concretize; photographic craft" },
+  { "id": "02-mug", "mode": "image", "input": "product shot of a coffee mug", "probe": "product photography; no invented branding" },
+  { "id": "03-poster", "mode": "image", "input": "cyberpunk city poster", "probe": "graphic design branch; text handling; no living-artist names" },
+  { "id": "04-selfie", "mode": "image", "input": "旅行自拍", "probe": "phone snapshot must stay a phone snapshot" },
+  { "id": "05-portrait", "mode": "image", "input": "给我女朋友拍一组写真，按参考图锁定脸和身材，身高163cm，不戴眼镜，气质安静不要网红感，场地海边或咖啡馆二选一，不要奢侈品", "probe": "identity branch; every hard constraint kept; either/or not merged" },
+  { "id": "06-logo", "mode": "auto", "oldMode": "image", "input": "logo for a bakery called Rye & Co.", "probe": "mode selection; exact text preserved; logo craft" },
+  { "id": "07-dedupe", "mode": "user", "input": "write a python script to dedupe a csv", "probe": "engineering practice; placeholders for client facts" },
+  { "id": "08-ratelimit", "mode": "user", "input": "实现一个限流器", "probe": "vague coding request; narrowing with stated assumptions" },
+  { "id": "09-support", "mode": "system", "input": "customer support bot for a SaaS billing product", "probe": "generalize; policies and placeholders; no invented company or refund terms" },
+  { "id": "10-tutor", "mode": "auto", "oldMode": "system", "input": "高中物理辅导老师", "probe": "tutoring practice; mode selection; reusable" },
+  { "id": "11-xhs", "mode": "user", "input": "给新款防晒霜写小红书文案", "probe": "channel conventions; no invented SPF, price or claims" },
+  { "id": "12-churn", "mode": "user", "input": "analyze churn", "probe": "data method; data stays a placeholder" },
+  { "id": "13-oneword", "mode": "auto", "oldMode": "user", "input": "营销", "probe": "one-word input; a committed, useful reading" },
+  { "id": "14-template", "mode": "user", "input": "一个通用的周报模板提示词，任何岗位都能用", "probe": "must stay general; variables, not one job's report" },
+  { "id": "15-contract", "mode": "user", "input": "Summarize the attached contract in exactly 5 bullets, under 120 words total, plain English, no legal advice, and always mention the termination clause", "probe": "hard constraints at full strength; preserve; no bloat" }
+]

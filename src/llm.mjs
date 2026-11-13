@@ -46,15 +46,15 @@ function redact(text, apiKey) {
 }
 
 /**
- * @param {{ baseUrl: string, apiKey: string, model: string, messages: {role: string, content: string}[], stream?: boolean, effort?: string, maxTokens?: number, signal?: AbortSignal, onDelta?: (s: string) => void, fetchImpl?: typeof fetch }} opts
+ * @param {{ baseUrl: string, apiKey: string, model: string, messages: {role: string, content: string}[], stream?: boolean, effort?: string, temperature?: number, maxTokens?: number, signal?: AbortSignal, onDelta?: (s: string) => void, fetchImpl?: typeof fetch }} opts
  */
 export async function complete(opts) {
   const fetchImpl = opts.fetchImpl ?? fetch;
   const body = {
     model: opts.model,
     messages: opts.messages,
-    temperature: 0.2,
-    max_tokens: opts.maxTokens ?? 4096,
+    temperature: opts.temperature ?? 0.2,
+    max_tokens: opts.maxTokens ?? 8192,
     stream: Boolean(opts.stream),
   };
   if (opts.effort) body.reasoning_effort = opts.effort;

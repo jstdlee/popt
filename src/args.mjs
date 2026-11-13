@@ -13,17 +13,22 @@ usage:
   popt -I -m user "旅行自拍"
 
 options:
-  -m, --mode <system|user|image>   default: user
-  -i, --iterate <change>           revise the prompt from stdin, -f, or the positional text
-  -I, --interactive                revise again from the terminal
+  -m, --mode <auto|system|user|image>
+                                   default: auto (the analyst picks; shown on stderr)
+  -i, --iterate <change>           revise the prompt from stdin, -f, or the positional text.
+                                   With -m, the reviser also gets that mode's craft reference
+  -I, --interactive                answer a few questions first, then revise from the terminal
   -f, --file <path>                read the prompt from a file
-      --rounds <n>                 draft plus critiques; default 2. Stops early on pass
-      --once                       one generation, no critique
+      --rounds <n>                 most candidates to write and review; default 2.
+                                   Stops at the first pass; the best-scored one wins
+      --once                       analyze and write once, no review
+      --lang <tag>                 output language, e.g. en; default: the input's
+      --brief                      print the analyst's brief (JSON) to stderr
       --model <id>                 default: grok/grok-4.7 (Magpie)
       --base-url <url>             default: http://127.0.0.1:3425/v1
       --effort <low|medium|high|xhigh>
       --no-stream                  accepted; intermediate passes are never streamed
-      --dry-run                    print the first request as JSON, no API call
+      --dry-run                    print the first request (the analyzer's) as JSON, no API call
   -q, --quiet
   -h, --help
   -v, --version
@@ -40,7 +45,9 @@ export function parseArgs(argv) {
   const out = {
     help: false,
     version: false,
-    mode: "user",
+    mode: "auto",
+    lang: "",
+    showBrief: false,
     iterate: "",
     interactive: false,
     file: "",
@@ -78,11 +85,13 @@ export function parseArgs(argv) {
     else if (arg === "--once") out.rounds = 1;
     else if (arg === "--rounds") out.rounds = Number(take());
     else if (arg === "--dry-run") out.dryRun = true;
+    else if (arg === "--lang") out.lang = take();
+    else if (arg === "--brief") out.showBrief = true;
+    else if (arg === "-q" || arg === "--quiet") out.quiet = true;
     else if (arg.startsWith("-")) throw new Error(`unknown option: ${arg}`);
     else positional.push(arg);
   }
   out.prompt = positional.join(" ").trim();
-  if (out.iterate) out.mode = "iterate";
   if (!out.help && !out.version && !MODES.includes(out.mode)) {
     throw new Error(`unknown mode: ${out.mode}`);
   }

@@ -31,6 +31,7 @@ for (const c of cases) {
   let calls = 0;
   const result = await runPipeline({
     mode: c.mode,
+    lang: c.lang,
     input: c.input,
     rounds: Number(opt("--rounds", c.rounds ?? 2)),
     complete: (messages) => {
